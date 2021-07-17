@@ -109,7 +109,7 @@ const startServer = async function () {
     };
 
     // Start Checker
-    setInterval(dnsEditorSend, Number(60000 * tinyCfg.autochecker));
+    setInterval(async () => { await dnsEditorSend(); return; }, Number(60000 * tinyCfg.autochecker));
     await dnsEditorSend();
     console.log(consoleGenerator('Cloudflare-Updater', `Cloudflare API started!`));
 
