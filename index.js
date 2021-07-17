@@ -1,6 +1,7 @@
 const startServer = async function () {
 
     // Modules
+    const repl = require('repl');
     const path = require('path');
     const fs = require('fs');
     const ini = require('ini');
@@ -139,6 +140,24 @@ const startServer = async function () {
 
     };
 
+    // Terminal
+    const terminalStart = function () {
+
+        // Start Remote
+        const remote = repl.start("Cloudflare-Updater > ");
+
+        remote.context.update = async function () {
+            await dnsEditorSend();
+            return;
+        };
+
+        remote.context.close = async function () {
+            await closeAwait();
+            return process.exit();
+        };
+
+    };
+
     // Close Script
     process.on('exit', closeAwait);
     process.on('close', closeAwait);
@@ -148,6 +167,7 @@ const startServer = async function () {
     setInterval(dnsEditorSend, Number(60000 * tinyCfg.autochecker));
     await dnsEditorSend();
     console.log(consoleGenerator('Cloudflare-Updater', `Cloudflare API started!`));
+    terminalStart();
 
     // Complete
     return;
