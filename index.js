@@ -88,15 +88,18 @@ const startServer = async function () {
 
                 // Edit Domain
                 console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}"...`));
-                /* await dns.edit(tinyCfg.zone, dnsData.id, {
-                    type: 'A'
-                }); */
+
+                await dns.edit(tinyCfg.zone, dnsData.id, {
+                    content: ip,
+                    type: dnsData.type,
+                    name: dnsData.name,
+                    ttl: dnsData.ttl,
+                    proxied: false
+                });
+
                 console.log(consoleGenerator('Cloudflare-Updater', `Done!`));
 
             }
-
-            console.log(ip);
-            console.log(dnsData);
 
             // Success
             console.log(consoleGenerator('Cloudflare-Updater', `DNS Update complete!`));
