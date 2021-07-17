@@ -31,6 +31,7 @@ const startServer = async function () {
 
     // DNS
     const dns = cf.dnsRecords;
+    const publicIp = require('public-ip');
 
     // Get DNS 
     const getDNSList = async function (page = 1) {
@@ -50,6 +51,10 @@ const startServer = async function () {
 
         // Starting
         console.log(consoleGenerator('Cloudflare-Updater', `Starting DNS Update...`));
+
+        // Get IP
+        const ip = await publicIp[tinyCfg.iptype]();
+        console.log(ip);
 
         // Get List
         if (!dnsData) {

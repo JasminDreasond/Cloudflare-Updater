@@ -23,7 +23,8 @@
   "dependencies": {
     "cloudflare": "^2.7.0",
     "ini": "^2.0.0",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "public-ip": "^4.0.4"
   },
   "tinyBuilder": {
     "filename": "mine_drive.exe",
