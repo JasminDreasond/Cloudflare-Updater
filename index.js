@@ -111,6 +111,43 @@ const startServer = async function () {
 
     };
 
+    // Close Await
+    const closeAwait = function () {
+
+        // Edit Domain
+        console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}" to the safe mode...`));
+
+        await dns.edit(tinyCfg.zone, dnsData.id, {
+            content: ip,
+            type: dnsData.type,
+            name: dnsData.name,
+            ttl: dnsData.ttl,
+            proxied: false
+        });
+
+        console.log(consoleGenerator('Cloudflare-Updater', `Done! You can close the app now.`));
+
+        // Complete
+        return;
+
+    };
+
+    // Close Script
+    process.on('exit', closeAwait);
+    process.on('close', closeAwait);
+
+    // ON Death
+    ON_DEATH(async function (signal, err) {
+
+        // Closing Message
+        console.log(consoleGenerator('Mine-Drive', `Closing App: ${signal}`));
+        if (err) { console.error(err); }
+        await minecraft.server.stop();
+        await closeAwait();
+        return;
+
+    });
+
     // Start Checker
     setInterval(dnsEditorSend, Number(60000 * tinyCfg.autochecker));
     await dnsEditorSend();
