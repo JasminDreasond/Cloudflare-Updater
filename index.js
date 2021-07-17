@@ -6,8 +6,7 @@ const startServer = async function () {
     const ini = require('ini');
     const moment = require('moment');
     const consoleGenerator = function (name, value) { return `[${moment().format('HH:mm:ss')}] [${name}]: ${value}`; };
-    let dnsID = null;
-    let dnsList = null;
+    let dnsData = null;
     console.log(consoleGenerator('Cloudflare-Updater', 'Starting App...'));
 
     // Files
@@ -33,16 +32,35 @@ const startServer = async function () {
     // DNS
     const dns = cf.dnsRecords;
 
+    // Get DNS 
+    const getDNSList = async function (page = 1) {
+
+        // Get List
+        const dnsList = await dns.browse(tinyCfg.zone);
+
+        // Get Item
+        dnsData = dnsList.result.find(dnsItem => dnsItem.name === tinyCfg.domain);
+        //if (dnsData) { return; } else { page++; await getDNSList(page); return; }
+        return;
+
+    };
+
     // DNS Editor
     const dnsEditorSend = async function () {
 
         // Get List
-        if (!dnsID) {
+        if (!dnsData) {
 
             // Get List
             console.log(consoleGenerator('Cloudflare-Updater', `Get DNS List`));
-            dnsList = await dns.browse(tinyCfg.zone);
+            await getDNSList();
             
+            // Detected
+            if(dnsData) {
+                console.log(consoleGenerator('Cloudflare-Updater', `Domain "${tinyCfg.domain}" found! This domain is using the IP "${dnsData.content}".`));
+            } else {
+                console.log(consoleGenerator('Cloudflare-Updater', `Domain "${tinyCfg.domain}" not found.`));
+            }
 
         }
 
