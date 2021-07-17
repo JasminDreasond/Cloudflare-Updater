@@ -2,7 +2,7 @@
   "name": "cloudflare-updater",
   "version": "1.0.0",
   "description": "Simple Cloudflare DNS Updater",
-  "productName": "Mine Drive",
+  "productName": "Tiny Cloudflare Updater",
   "copyright": "JasminDreasond (Yasmin Seidel)",
   "companyName": "Puddy Club",
   "main": "index.js",
