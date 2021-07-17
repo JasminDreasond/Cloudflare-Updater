@@ -20,6 +20,7 @@ const startServer = async function () {
     } catch (err) { try { tinyCfg = ini.parse(fs.readFileSync(path.join(__dirname, './test/cloudflare-updater.ini'), 'utf-8')); } catch (err) { throw err; } }
 
     if (typeof tinyCfg.autochecker !== "string" && typeof tinyCfg.autochecker !== "number") { tinyCfg.autochecker = 30; } else { tinyCfg.autochecker = Number(tinyCfg.autochecker); }
+    if (typeof tinyCfg.autochecker === "string" && tinyCfg.autochecker.length > 0) { dnsData = { id = tinyCfg.autochecker }; }
     console.log(consoleGenerator('Cloudflare-Updater', `Config Loaded!`));
 
     // Cloudflare Module
@@ -74,7 +75,17 @@ const startServer = async function () {
 
             }
 
+            // Update IP
+            if (dnsData) {
+
+                // Edit Domain
+                console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}"...`));
+                await dns.edit(tinyCfg.zone, dnsData.id);
+
+            }
+
             console.log(ip);
+            console.log(dnsData);
 
             // Success
             console.log(consoleGenerator('Cloudflare-Updater', `DNS Update complete!`));
