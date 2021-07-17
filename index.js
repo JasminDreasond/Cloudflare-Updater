@@ -1,7 +1,6 @@
 const startServer = async function () {
 
     // Modules
-    const repl = require('repl');
     const path = require('path');
     const fs = require('fs');
     const ini = require('ini');
@@ -95,7 +94,7 @@ const startServer = async function () {
                     type: dnsData.type,
                     name: dnsData.name,
                     ttl: dnsData.ttl,
-                    proxied: false
+                    proxied: dnsData.proxied
                 });
 
                 console.log(consoleGenerator('Cloudflare-Updater', `Done!`));
@@ -112,66 +111,10 @@ const startServer = async function () {
 
     };
 
-    // Close Await
-    const closeAwait = async function () {
-
-        // Update
-        if (dnsData && dnsData.type && dnsData.name && dnsData.ttl) {
-
-            // Edit Domain
-            console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}" to the safe mode...`));
-
-            const ip = await publicIp[tinyCfg.iptype]();
-            await dns.edit(tinyCfg.zone, dnsData.id, {
-                content: ip,
-                type: dnsData.type,
-                name: dnsData.name,
-                ttl: dnsData.ttl,
-                proxied: true
-            });
-
-        }
-
-        // Done
-        console.log(consoleGenerator('Cloudflare-Updater', `Done! You can close the app now.`));
-
-        // Complete
-        return;
-
-    };
-
-    // Terminal
-    const terminalStart = function () {
-
-        /* // Start Remote
-        const remote = repl.start("Cloudflare-Updater > ");
-
-        remote.context.update = async function () {
-            remote.close();
-            await dnsEditorSend();
-            terminalStart();
-            return;
-        };
-
-        remote.context.close = async function () {
-            remote.close();
-            await closeAwait();
-            return process.exit();
-        }; */
-        return;
-
-    };
-
-    // Close Script
-    process.on('exit', closeAwait);
-    process.on('close', closeAwait);
-    require('death')(async function (signal, err) { console.log(consoleGenerator('Cloudflare-Updater', `Closing App: ${signal}`)); await closeAwait(); return; });
-
     // Start Checker
     setInterval(dnsEditorSend, Number(60000 * tinyCfg.autochecker));
     await dnsEditorSend();
     console.log(consoleGenerator('Cloudflare-Updater', `Cloudflare API started!`));
-    terminalStart();
 
     // Complete
     return;
