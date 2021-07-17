@@ -6,6 +6,7 @@ const startServer = async function () {
     const ini = require('ini');
     const moment = require('moment');
     const consoleGenerator = function (name, value) { return `[${moment().format('HH:mm:ss')}] [${name}]: ${value}`; };
+    let dnsID = null;
     console.log(consoleGenerator('Cloudflare-Updater', 'Starting App...'));
 
     // Files
@@ -17,10 +18,33 @@ const startServer = async function () {
     console.log(consoleGenerator('Cloudflare-Updater', `Config Loaded!`));
 
     // Cloudflare Module
+    console.log(consoleGenerator('Cloudflare-Updater', `Starting Cloudflare API...`));
     const cf = require('cloudflare')({
         email: tinyCfg.email,
         key: tinyCfg.key
     });
+
+    // DNS Editor
+    const dnsEditorSend = async function() {
+
+        // Get List
+        if(!dnsID) {
+
+            // Get List
+            const dnsList = await cf.browse(tinyCfg.zone);
+            console.log(dnsList);
+
+        }
+
+        // Complete
+        return;
+
+    };
+
+    // Start Checker
+    setInterval(dnsEditorSend, tinyCfg.autochecker);
+    await dnsEditorSend();
+    console.log(consoleGenerator('Cloudflare-Updater', `Cloudflare API started!`));
 
     // Complete
     return;
