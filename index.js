@@ -137,7 +137,7 @@ const startServer = async function () {
     process.on('close', closeAwait);
 
     // ON Death
-    ON_DEATH(async function (signal, err) {
+    require('death')(async function (signal, err) {
 
         // Closing Message
         console.log(consoleGenerator('Mine-Drive', `Closing App: ${signal}`));
