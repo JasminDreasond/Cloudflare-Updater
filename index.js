@@ -14,7 +14,12 @@ const startServer = async function () {
     const rootPath = path.dirname(process.execPath);
     console.log(consoleGenerator('Cloudflare-Updater', `App Path: ${rootPath}`));
     console.log(consoleGenerator('Cloudflare-Updater', `Loading Config...`));
-    const tinyCfg = ini.parse(fs.readFileSync(path.join(rootPath, './cloudflare-updater.ini'), 'utf-8'));
+
+    let tinyCfg = null;
+    try {
+        tinyCfg = ini.parse(fs.readFileSync(path.join(rootPath, './cloudflare-updater.ini'), 'utf-8'));
+    } catch (err) { try { tinyCfg = ini.parse(fs.readFileSync(path.join(__dirname, './test/cloudflare-updater.ini'), 'utf-8')); } catch (err) { throw err; } }
+
     if (typeof tinyCfg.autochecker !== "string" && typeof tinyCfg.autochecker !== "number") { tinyCfg.autochecker = 30; } else { tinyCfg.autochecker = Number(tinyCfg.autochecker); }
     console.log(consoleGenerator('Cloudflare-Updater', `Config Loaded!`));
 
@@ -26,10 +31,10 @@ const startServer = async function () {
     });
 
     // DNS Editor
-    const dnsEditorSend = async function() {
+    const dnsEditorSend = async function () {
 
         // Get List
-        if(!dnsID) {
+        if (!dnsID) {
 
             // Get List
             console.log(consoleGenerator('Cloudflare-Updater', `Get DNS List`));
