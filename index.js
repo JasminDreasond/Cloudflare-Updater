@@ -114,17 +114,24 @@ const startServer = async function () {
     // Close Await
     const closeAwait = async function () {
 
-        // Edit Domain
-        console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}" to the safe mode...`));
+        // Update
+        if (dnsData && dnsData.type && dnsData.name && dnsData.ttl) {
 
-        await dns.edit(tinyCfg.zone, dnsData.id, {
-            content: ip,
-            type: dnsData.type,
-            name: dnsData.name,
-            ttl: dnsData.ttl,
-            proxied: false
-        });
+            // Edit Domain
+            console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}" to the safe mode...`));
 
+            const ip = await publicIp[tinyCfg.iptype]();
+            await dns.edit(tinyCfg.zone, dnsData.id, {
+                content: ip,
+                type: dnsData.type,
+                name: dnsData.name,
+                ttl: dnsData.ttl,
+                proxied: true
+            });
+
+        }
+
+        // Done
         console.log(consoleGenerator('Cloudflare-Updater', `Done! You can close the app now.`));
 
         // Complete
@@ -135,18 +142,7 @@ const startServer = async function () {
     // Close Script
     process.on('exit', closeAwait);
     process.on('close', closeAwait);
-
-    // ON Death
-    require('death')(async function (signal, err) {
-
-        // Closing Message
-        console.log(consoleGenerator('Mine-Drive', `Closing App: ${signal}`));
-        if (err) { console.error(err); }
-        await minecraft.server.stop();
-        await closeAwait();
-        return;
-
-    });
+    require('death')(async function (signal, err) { console.log(consoleGenerator('Cloudflare-Updater', `Closing App: ${signal}`)); await closeAwait(); return; });
 
     // Start Checker
     setInterval(dnsEditorSend, Number(60000 * tinyCfg.autochecker));
