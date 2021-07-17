@@ -25,10 +25,7 @@ const startServer = async function () {
 
     // Cloudflare Module
     console.log(consoleGenerator('Cloudflare-Updater', `Starting Cloudflare API...`));
-    const cf = require('cloudflare')({
-        email: tinyCfg.email,
-        key: tinyCfg.key
-    });
+    const cf = require('cloudflare')(tinyCfg.login);
 
     // DNS
     const dns = cf.dnsRecords;
