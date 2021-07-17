@@ -54,7 +54,7 @@ const startServer = async function () {
         const ip = await publicIp[tinyCfg.iptype]();
 
         // Validator
-        if (!dnsData || dnsData.content !== ip) {
+        if (!dnsData || !dnsData.content || dnsData.content !== ip) {
 
             // Starting
             console.log(consoleGenerator('Cloudflare-Updater', `Starting DNS Update...`));
