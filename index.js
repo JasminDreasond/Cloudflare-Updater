@@ -30,6 +30,9 @@ const startServer = async function () {
         key: tinyCfg.key
     });
 
+    // DNS
+    const dns = cf.dnsRecords;
+
     // DNS Editor
     const dnsEditorSend = async function () {
 
@@ -38,8 +41,8 @@ const startServer = async function () {
 
             // Get List
             console.log(consoleGenerator('Cloudflare-Updater', `Get DNS List`));
-            dnsList = await cf.browse(tinyCfg.zone);
-            console.log(dnsList);
+            dnsList = await dns.browse(tinyCfg.zone);
+            
 
         }
 
