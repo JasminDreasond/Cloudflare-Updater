@@ -48,11 +48,14 @@ const startServer = async function () {
     // DNS Editor
     const dnsEditorSend = async function () {
 
+        // Starting
+        console.log(consoleGenerator('Cloudflare-Updater', `Starting DNS Update...`));
+
         // Get List
         if (!dnsData) {
 
             // Get List
-            console.log(consoleGenerator('Cloudflare-Updater', `Get DNS List`));
+            console.log(consoleGenerator('Cloudflare-Updater', `Getting DNS List...`));
             await getDNSList();
             
             // Detected
@@ -65,6 +68,7 @@ const startServer = async function () {
         }
 
         // Complete
+        console.log(consoleGenerator('Cloudflare-Updater', `DNS Update complete!`));
         return;
 
     };
