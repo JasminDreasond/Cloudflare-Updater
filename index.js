@@ -16,6 +16,12 @@ const startServer = async function () {
     if (typeof tinyCfg.autochecker !== "string" && typeof tinyCfg.autochecker !== "number") { tinyCfg.autochecker = 30; } else { tinyCfg.autochecker = Number(tinyCfg.autochecker); }
     console.log(consoleGenerator('Cloudflare-Updater', `Config Loaded!`));
 
+    // Cloudflare Module
+    const cf = require('cloudflare')({
+        email: tinyCfg.email,
+        key: tinyCfg.key
+    });
+
     // Complete
     return;
 
