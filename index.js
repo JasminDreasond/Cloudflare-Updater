@@ -20,7 +20,7 @@ const startServer = async function () {
     } catch (err) { try { tinyCfg = ini.parse(fs.readFileSync(path.join(__dirname, './test/cloudflare-updater.ini'), 'utf-8')); } catch (err) { throw err; } }
 
     if (typeof tinyCfg.autochecker !== "string" && typeof tinyCfg.autochecker !== "number") { tinyCfg.autochecker = 30; } else { tinyCfg.autochecker = Number(tinyCfg.autochecker); }
-    if (typeof tinyCfg.autochecker === "string" && tinyCfg.autochecker.length > 0) { dnsData = { id = tinyCfg.autochecker }; }
+    if (typeof tinyCfg.domainid === "string" && tinyCfg.domainid.length > 0) { dnsData = { id = tinyCfg.domainid }; }
     console.log(consoleGenerator('Cloudflare-Updater', `Config Loaded!`));
 
     // Cloudflare Module
@@ -41,7 +41,7 @@ const startServer = async function () {
         const dnsList = await dns.browse(tinyCfg.zone);
 
         // Get Item
-        dnsData = dnsList.result.find(dnsItem => dnsItem.name === tinyCfg.domain);
+        dnsData = dnsList.result.find(dnsItem => dnsItem.name === tinyCfg.domain );
         //if (dnsData) { return; } else { page++; await getDNSList(page); return; }
         return;
 
@@ -75,12 +75,22 @@ const startServer = async function () {
 
             }
 
+            // Get More Information
+            else if (!dnsData.content) {
+                console.log(consoleGenerator('Cloudflare-Updater', `Getting "${tinyCfg.domain}"...`));
+                dnsData = await dns.read(tinyCfg.zone, dnsData.id);
+                console.log(consoleGenerator('Cloudflare-Updater', `Done!`));
+            }
+
             // Update IP
             if (dnsData) {
 
                 // Edit Domain
                 console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}"...`));
-                await dns.edit(tinyCfg.zone, dnsData.id);
+                /* await dns.edit(tinyCfg.zone, dnsData.id, {
+                    type: 'A'
+                }); */
+                console.log(consoleGenerator('Cloudflare-Updater', `Done!`));
 
             }
 
