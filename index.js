@@ -147,11 +147,14 @@ const startServer = async function () {
         const remote = repl.start("Cloudflare-Updater > ");
 
         remote.context.update = async function () {
+            remote.close();
             await dnsEditorSend();
+            terminalStart();
             return;
         };
 
         remote.context.close = async function () {
+            remote.close();
             await closeAwait();
             return process.exit();
         };
