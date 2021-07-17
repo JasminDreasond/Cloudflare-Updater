@@ -143,7 +143,7 @@ const startServer = async function () {
     // Terminal
     const terminalStart = function () {
 
-        // Start Remote
+        /* // Start Remote
         const remote = repl.start("Cloudflare-Updater > ");
 
         remote.context.update = async function () {
@@ -157,7 +157,8 @@ const startServer = async function () {
             remote.close();
             await closeAwait();
             return process.exit();
-        };
+        }; */
+        return;
 
     };
 
