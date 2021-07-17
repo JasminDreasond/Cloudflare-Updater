@@ -7,6 +7,7 @@ const startServer = async function () {
     const moment = require('moment');
     const consoleGenerator = function (name, value) { return `[${moment().format('HH:mm:ss')}] [${name}]: ${value}`; };
     let dnsID = null;
+    let dnsList = null;
     console.log(consoleGenerator('Cloudflare-Updater', 'Starting App...'));
 
     // Files
@@ -31,7 +32,8 @@ const startServer = async function () {
         if(!dnsID) {
 
             // Get List
-            const dnsList = await cf.browse(tinyCfg.zone);
+            console.log(consoleGenerator('Cloudflare-Updater', `Get DNS List`));
+            dnsList = await cf.browse(tinyCfg.zone);
             console.log(dnsList);
 
         }
