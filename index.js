@@ -112,7 +112,7 @@ const startServer = async function () {
     };
 
     // Close Await
-    const closeAwait = function () {
+    const closeAwait = async function () {
 
         // Edit Domain
         console.log(consoleGenerator('Cloudflare-Updater', `Updating "${tinyCfg.domain}" to the safe mode...`));
