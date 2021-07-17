@@ -49,31 +49,39 @@ const startServer = async function () {
     // DNS Editor
     const dnsEditorSend = async function () {
 
-        // Starting
-        console.log(consoleGenerator('Cloudflare-Updater', `Starting DNS Update...`));
-
         // Get IP
         const ip = await publicIp[tinyCfg.iptype]();
-        console.log(ip);
 
-        // Get List
-        if (!dnsData) {
+        // Validator
+        if (!dnsData || dnsData.content !== ip) {
+
+            // Starting
+            console.log(consoleGenerator('Cloudflare-Updater', `Starting DNS Update...`));
 
             // Get List
-            console.log(consoleGenerator('Cloudflare-Updater', `Getting DNS List...`));
-            await getDNSList();
-            
-            // Detected
-            if(dnsData) {
-                console.log(consoleGenerator('Cloudflare-Updater', `Domain "${tinyCfg.domain}" found! This domain is using the IP "${dnsData.content}".`));
-            } else {
-                console.log(consoleGenerator('Cloudflare-Updater', `Domain "${tinyCfg.domain}" not found.`));
+            if (!dnsData) {
+
+                // Get List
+                console.log(consoleGenerator('Cloudflare-Updater', `Getting DNS List...`));
+                await getDNSList();
+
+                // Detected
+                if (dnsData) {
+                    console.log(consoleGenerator('Cloudflare-Updater', `Domain "${tinyCfg.domain}" found! This domain is using the IP "${dnsData.content}".`));
+                } else {
+                    console.log(consoleGenerator('Cloudflare-Updater', `Domain "${tinyCfg.domain}" not found.`));
+                }
+
             }
+
+            console.log(ip);
+
+            // Success
+            console.log(consoleGenerator('Cloudflare-Updater', `DNS Update complete!`));
 
         }
 
         // Complete
-        console.log(consoleGenerator('Cloudflare-Updater', `DNS Update complete!`));
         return;
 
     };
